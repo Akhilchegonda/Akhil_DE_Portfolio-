@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akhil CH — Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #E50914;
+    --red2: #B20710;
+    --gold: #F5C518;
+    --bg: #0A0A0A;
+    --bg2: #141414;
+    --bg3: #1A1A1A;
+    --card: #1F1F1F;
+    --txt: #E8E8E8;
+    --txt2: #A0A0A0;
+    --txt3: #606060;
+    --white: #FFFFFF;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+  /* ─── NAVBAR ─── */
+  .navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 4vw;
+    height: 68px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, transparent 100%);
+    transition: background 0.4s;
+  }
+  .navbar.scrolled { background: rgba(10,10,10,0.97); }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--red);
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-link {
+    font-family: var(--font-cond);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--txt2);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .nav-link:hover { color: var(--white); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(229,9,20,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 10% 60%, rgba(229,9,20,0.04) 0%, transparent 50%);
+  }
+
+  /* Animated grid lines */
+  .hero-grid {
+    position: absolute; inset: 0; overflow: hidden; opacity: 0.06;
+  }
+  .hero-grid::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(229,9,20,0.6) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(229,9,20,0.6) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { 0%{transform:translateY(0)} 100%{transform:translateY(60px)} }
+
+  /* Particles */
+  .particles { position: absolute; inset: 0; overflow: hidden; }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: float linear infinite;
+    opacity: 0;
+  }
+  @keyframes float {
+    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-20px) translateX(40px); opacity: 0; }
+  }
+
+  .hero-vignette {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(10,10,10,1) 0%,
+      rgba(10,10,10,0.8) 20%,
+      rgba(10,10,10,0.3) 50%,
+      rgba(10,10,10,0.1) 80%,
+      transparent 100%
+    );
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 4vw 80px;
+    max-width: 800px;
+  }
+
+  .hero-label {
+    font-family: var(--font-cond);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 12vw, 120px);
+    line-height: 0.92;
+    color: var(--white);
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.5s forwards;
+  }
+
+  .hero-name span { color: var(--red); }
+
+  .hero-tagline {
+    font-family: var(--font-cond);
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--txt2);
+    margin-top: 12px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.7s forwards;
+    text-transform: uppercase;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--txt2);
+    max-width: 520px;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.9s forwards;
+  }
+
+  .hero-btns {
+    display: flex; gap: 12px; margin-top: 28px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.1s forwards;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--white);
+    color: #000;
+    font-family: var(--font-cond);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 12px 28px;
+    border: none; border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .btn-play:hover { background: rgba(255,255,255,0.85); transform: scale(1.03); }
+
+  .btn-info {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(109,109,110,0.7);
+    color: var(--white);
+    font-family: var(--font-cond);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 12px 28px;
+    border: none; border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+  .btn-info:hover { background: rgba(109,109,110,0.5); }
+
+  .play-icon {
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 14px solid #000;
+  }
+  .info-icon {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+
+  /* Hero stats ticker */
+  .hero-stats {
+    position: absolute; bottom: 0; right: 4vw;
+    display: flex; gap: 32px;
+    padding-bottom: 80px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.4s forwards;
+  }
+  .hstat { text-align: right; }
+  .hstat-num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    color: var(--red);
+    line-height: 1;
+  }
+  .hstat-lbl {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--txt3);
+    margin-top: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ─── SECTION ROWS (Netflix style) ─── */
+  .section-row {
+    padding: 0 4vw;
+    margin-bottom: 48px;
+  }
+
+  .row-title {
+    font-family: var(--font-cond);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--txt);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .row-title::before {
+    content: '';
+    display: block;
+    width: 4px; height: 22px;
+    background: var(--red);
+    border-radius: 2px;
+  }
+
+  /* ─── CARD STRIP (horizontal scroll) ─── */
+  .card-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 20px;
+    padding-top: 8px;
+    scrollbar-width: none;
+  }
+  .card-strip::-webkit-scrollbar { display: none; }
+
+  .strip-card {
+    flex: 0 0 240px;
+    height: 160px;
+    border-radius: 6px;
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(.25,.46,.45,.94), z-index 0s;
+  }
+  .strip-card:hover {
+    transform: scale(1.12);
+    z-index: 10;
+  }
+
+  .strip-card .card-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--c1, #1a1a2e) 0%, var(--c2, #16213e) 100%);
+  }
+  .strip-card .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+  }
+  .strip-card .card-icon {
+    position: absolute; top: 16px; left: 16px;
+    font-size: 28px;
+    opacity: 0.85;
+  }
+  .strip-card .card-label {
+    position: absolute; bottom: 12px; left: 14px; right: 14px;
+    font-family: var(--font-cond);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .strip-card .card-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--txt3);
+    margin-top: 3px;
+    letter-spacing: 0.03em;
+    text-transform: none;
+  }
+
+  /* Animated accent line on card */
+  .strip-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 3px;
+    background: var(--red);
+    transition: width 0.3s ease;
+  }
+  .strip-card:hover::after { width: 100%; }
+
+  /* ─── FEATURED (big experience cards) ─── */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feat-card {
+    position: relative;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feat-card:hover {
+    border-color: var(--red);
+    transform: translateX(6px);
+  }
+
+  .feat-card-inner { padding: 24px 28px; display: flex; gap: 24px; align-items: flex-start; }
+
+  .feat-num {
+    font-family: var(--font-display);
+    font-size: 72px;
+    line-height: 1;
+    color: rgba(229,9,20,0.15);
+    flex-shrink: 0;
+    width: 80px;
+    transition: color 0.3s;
+  }
+  .feat-card:hover .feat-num { color: rgba(229,9,20,0.4); }
+
+  .feat-content { flex: 1; }
+
+  .feat-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+
+  .feat-company {
+    font-family: var(--font-display);
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .feat-period {
+    font-family: var(--font-cond);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    background: rgba(229,9,20,0.1);
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .feat-role {
+    font-family: var(--font-cond);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--txt2);
+    margin-bottom: 12px;
+  }
+
+  .feat-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .feat-pill {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--txt2);
+    background: rgba(255,255,255,0.06);
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .feat-bullets { list-style: none; }
+  .feat-bullet {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--txt2);
+    line-height: 1.6;
+    padding: 3px 0 3px 16px;
+    position: relative;
+  }
+  .feat-bullet::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--red);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  .feat-bar {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .feat-card:hover .feat-bar { opacity: 1; }
+
+  /* ─── CERT CARDS ─── */
+  .cert-strip { display: flex; gap: 14px; flex-wrap: wrap; }
+  .cert-card {
+    flex: 1; min-width: 200px;
+    background: var(--card);
+    border-radius: 8px;
+    padding: 22px 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative; overflow: hidden;
+    cursor: default;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .cert-card:hover { border-color: var(--gold); transform: translateY(-6px); }
+  .cert-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .cert-card:hover::before { opacity: 1; }
+  .cert-icon { font-size: 32px; margin-bottom: 12px; }
+  .cert-name {
+    font-family: var(--font-cond);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .cert-badge {
+    display: inline-block;
+    font-family: var(--font-cond);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(245,197,24,0.4);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* ─── CONTACT SECTION ─── */
+  .contact-wrap {
+    background: linear-gradient(to right, rgba(229,9,20,0.12) 0%, transparent 60%);
+    border-radius: 10px;
+    border: 1px solid rgba(229,9,20,0.2);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .contact-headline {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .contact-sub {
+    font-size: 14px;
+    color: var(--txt2);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .contact-items { display: flex; flex-direction: column; gap: 14px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .contact-item:hover { border-color: var(--red); background: rgba(229,9,20,0.08); }
+  .contact-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(229,9,20,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .contact-lbl {
+    font-family: var(--font-cond);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--txt3);
+  }
+  .contact-val {
+    font-size: 14px;
+    color: var(--white);
+    margin-top: 2px;
+  }
+
+  /* MESSAGE FORM */
+  .msg-form { display: flex; flex-direction: column; gap: 12px; }
+  .msg-label {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--txt3);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .msg-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .msg-input::placeholder { color: var(--txt3); }
+  .msg-input:focus { border-color: var(--red); }
+  .msg-select {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--white);
+    outline: none;
+  }
+  .msg-select option { background: #1a1a1a; }
+  .btn-generate {
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--font-cond);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 24px;
+    border: none; border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    width: 100%;
+  }
+  .btn-generate:hover { background: var(--red2); transform: scale(1.02); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .gen-loading {
+    display: none;
+    font-family: var(--font-cond);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    text-align: center;
+    padding: 10px 0;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  .gen-output { display: none; margin-top: 8px; }
+  .gen-subject {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--txt3);
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .gen-body-txt {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--txt2);
+    white-space: pre-wrap;
+    padding: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .gen-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-sec {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--txt);
+    font-family: var(--font-cond);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-sec:hover { border-color: var(--red); color: var(--red); }
+  .ok-msg { font-family: var(--font-cond); font-size: 11px; color: #1D9E75; display: none; text-align: center; margin-top: 6px; letter-spacing: 0.1em; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    padding: 32px 4vw;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 22px; color: var(--red); letter-spacing: 2px; }
+  .footer-txt { font-family: var(--font-cond); font-size: 12px; color: var(--txt3); letter-spacing: 0.08em; }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── SECTION DIVIDER ─── */
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0 4vw 40px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero-stats { display: none; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .feat-card-inner { flex-direction: column; gap: 12px; }
+    .feat-num { font-size: 48px; width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-logo">AKHIL</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#skills">Skills</a>
+    <a class="nav-link" href="#experience">Experience</a>
+    <a class="nav-link" href="#certifications">Certifications</a>
+    <a class="nav-link" href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-vignette"></div>
+
+  <div class="hero-content">
+    <div class="hero-label">Data Engineer · Available Now</div>
+    <div class="hero-name">Akhil<br><span>CH</span></div>
+    <div class="hero-tagline">Azure · Databricks · Spark · Lakehouse</div>
+    <p class="hero-desc">4+ years building production-grade Lakehouse platforms processing petabyte-scale workloads across telecom, healthcare, and fintech. Delivering measurable impact — from 5TB/day CDR pipelines to HIPAA-compliant systems managing 200M+ records.</p>
+    <div class="hero-btns">
+      <a class="btn-play" href="#experience">
+        <div class="play-icon"></div>
+        View Experience
+      </a>
+      <a class="btn-info" href="#contact">
+        <div class="info-icon">i</div>
+        Get in Touch
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-num">5TB</div>
+      <div class="hstat-lbl">Daily data</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">200M+</div>
+      <div class="hstat-lbl">Records managed</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">35%</div>
+      <div class="hstat-lbl">Cost savings</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">4+</div>
+      <div class="hstat-lbl">Years exp.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS ROW -->
+<section id="skills" style="padding-top: 48px;">
+  <div class="section-row reveal">
+    <div class="row-title">Technical Arsenal</div>
+    <div class="card-strip">
+      <div class="strip-card" style="--c1:#0d1b2a;--c2:#1b2d3e;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">🐍</div>
+        <div class="card-label">Python / PySpark<div class="card-sub">SQL · Spark SQL · Shell</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#1a0a00;--c2:#2d1600;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">⚡</div>
+        <div class="card-label">Apache Spark<div class="card-sub">Databricks · Delta Lake · dbt</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#001a1a;--c2:#002d2d;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">☁️</div>
+        <div class="card-label">Azure Cloud<div class="card-sub">ADLS Gen2 · ADF · Synapse · DevOps</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#0a001a;--c2:#16002e;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">🌩️</div>
+        <div class="card-label">Apache Kafka<div class="card-sub">Airflow · Hadoop · Hive</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#001a0a;--c2:#002d14;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">❄️</div>
+        <div class="card-label">Snowflake<div class="card-sub">Redshift · AWS S3 · Athena</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#1a1000;--c2:#2d1a00;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">🏛️</div>
+        <div class="card-label">Lakehouse Design<div class="card-sub">Medallion · Star Schema · Data Mesh</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#1a0000;--c2:#2d0000;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">🛡️</div>
+        <div class="card-label">Data Quality<div class="card-sub">Great Expectations · Unity Catalog · RBAC</div></div>
+      </div>
+      <div class="strip-card" style="--c1:#0a0a1a;--c2:#14142e;">
+        <div class="card-bg"></div><div class="card-overlay"></div>
+        <div class="card-icon">📊</div>
+        <div class="card-label">BI & Visualization<div class="card-sub">Power BI · Tableau</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-row">
+    <div class="row-title reveal">Career Timeline</div>
+    <div class="featured-grid">
+
+      <div class="feat-card reveal reveal-delay-1">
+        <div class="feat-bar"></div>
+        <div class="feat-card-inner">
+          <div class="feat-num">01</div>
+          <div class="feat-content">
+            <div class="feat-header">
+              <div class="feat-company">Spectrum</div>
+              <div class="feat-period">Jun 2024 – Present</div>
+            </div>
+            <div class="feat-role">Data Engineer · Charter Communications</div>
+            <div class="feat-pills">
+              <span class="feat-pill">5TB/day</span>
+              <span class="feat-pill">Azure Databricks</span>
+              <span class="feat-pill">Kafka</span>
+              <span class="feat-pill">Delta Lake</span>
+              <span class="feat-pill">Fortune 500</span>
+            </div>
+            <ul class="feat-bullets">
+              <li class="feat-bullet">Built real-time + batch pipelines processing 5TB/day of telecom subscriber data on Azure Databricks + Kafka, eliminating overnight batch dependency for 3 BI teams.</li>
+              <li class="feat-bullet">Designed Medallion Lakehouse (Bronze/Silver/Gold) on ADLS Gen2 + Delta Lake, reducing downstream data prep time by 35%.</li>
+              <li class="feat-bullet">Cut Spark CDR processing costs by 25–30% via adaptive query execution, Z-order indexing, and cluster auto-scaling.</li>
+              <li class="feat-bullet">Eliminated 30% of billing data discrepancies using Great Expectations integrated into ADF pipeline monitoring.</li>
+              <li class="feat-bullet">Accelerated ML churn model training by 25% by delivering curated Silver/Gold PySpark transformation layers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-2">
+        <div class="feat-bar"></div>
+        <div class="feat-card-inner">
+          <div class="feat-num">02</div>
+          <div class="feat-content">
+            <div class="feat-header">
+              <div class="feat-company">BCBS Texas</div>
+              <div class="feat-period">Aug 2023 – May 2024</div>
+            </div>
+            <div class="feat-role">Data Engineer · Blue Cross Blue Shield</div>
+            <div class="feat-pills">
+              <span class="feat-pill">200M+ Records</span>
+              <span class="feat-pill">HIPAA</span>
+              <span class="feat-pill">HL7 FHIR</span>
+              <span class="feat-pill">Snowflake</span>
+              <span class="feat-pill">0 Outages</span>
+            </div>
+            <ul class="feat-bullets">
+              <li class="feat-bullet">Built core claims ingestion platform on Azure Databricks + ADLS Gen2 processing HL7 FHIR and EDI 837/835 for 200M+ claims — zero production outages across 10-month tenure.</li>
+              <li class="feat-bullet">Reduced Snowflake compute costs by 35–40% through clustering key optimization, materialized views, and workload management.</li>
+              <li class="feat-bullet">Achieved full HIPAA compliance across PHI/PII data assets using Databricks Unity Catalog column-level security and dynamic data masking.</li>
+              <li class="feat-bullet">Cut data quality incidents by 30% via Great Expectations validation + Azure Monitor alerts at every Bronze-to-Silver transition.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-3">
+        <div class="feat-bar"></div>
+        <div class="feat-card-inner">
+          <div class="feat-num">03</div>
+          <div class="feat-content">
+            <div class="feat-header">
+              <div class="feat-company">Softpoint</div>
+              <div class="feat-period">Feb 2020 – Jun 2022</div>
+            </div>
+            <div class="feat-role">Data Engineer · Softpoint Technologies</div>
+            <div class="feat-pills">
+              <span class="feat-pill">Fintech</span>
+              <span class="feat-pill">Azure Data Factory</span>
+              <span class="feat-pill">Power BI</span>
+              <span class="feat-pill">Databricks</span>
+            </div>
+            <ul class="feat-bullets">
+              <li class="feat-bullet">Delivered 3 core financial data pipelines using Azure Data Factory to ingest trade records, loan portfolios, and account data into ADLS Gen2.</li>
+              <li class="feat-bullet">Built Power BI dashboards on Azure Synapse tracking transaction volumes, loan delinquency rates, and portfolio KPIs — adopted as primary reporting tool.</li>
+              <li class="feat-bullet">Prepared feature datasets for fraud detection and credit risk models using Databricks, including null handling, outlier removal, and behavioral feature extraction.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education card -->
+      <div class="feat-card reveal reveal-delay-4" style="border-color: rgba(245,197,24,0.15);">
+        <div class="feat-bar" style="background: linear-gradient(to bottom, var(--gold), transparent);"></div>
+        <div class="feat-card-inner">
+          <div class="feat-num" style="color: rgba(245,197,24,0.15);">🎓</div>
+          <div class="feat-content">
+            <div class="feat-header">
+              <div class="feat-company" style="font-size:22px">University of North Texas</div>
+              <div class="feat-period" style="color:var(--gold); background:rgba(245,197,24,0.1);">Aug 2022 – May 2024</div>
+            </div>
+            <div class="feat-role">Master of Science · Data Science</div>
+            <div class="feat-pills">
+              <span class="feat-pill">M.S. Data Science</span>
+              <span class="feat-pill">USA</span>
+              <span class="feat-pill">Concurrent with BCBS role</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-row reveal">
+    <div class="row-title">Certifications</div>
+    <div class="cert-strip">
+      <div class="cert-card">
+        <div class="cert-icon">🔷</div>
+        <div class="cert-name">Databricks Certified Data Engineer Associate</div>
+        <div class="cert-badge">Databricks</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">☁️</div>
+        <div class="cert-name">AWS Certified Cloud Practitioner</div>
+        <div class="cert-badge">Amazon Web Services</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">📊</div>
+        <div class="cert-name">Tableau Desktop Specialist</div>
+        <div class="cert-badge">Tableau</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-row reveal" style="margin-bottom: 60px;">
+    <div class="row-title">Get in Touch</div>
+    <div class="contact-wrap">
+      <div>
+        <div class="contact-headline">Let's<br>Connect</div>
+        <p class="contact-sub">Open to senior data engineering roles, consulting engagements, and exciting new challenges. Based in Dallas — open to relocation.</p>
+        <div class="contact-items">
+          <a class="contact-item" href="mailto:ch.akhil1648@gmail.com">
+            <div class="contact-icon">📧</div>
+            <div>
+              <div class="contact-lbl">Email</div>
+              <div class="contact-val">ch.akhil1648@gmail.com</div>
+            </div>
+          </a>
+          <a class="contact-item" href="tel:9406297292">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-lbl">Phone</div>
+              <div class="contact-val">940-629-7292</div>
+            </div>
+          </a>
+          <a class="contact-item" href="https://www.linkedin.com/in/akhilch1208/" target="_blank">
+            <div class="contact-icon">💼</div>
+            <div>
+              <div class="contact-lbl">LinkedIn</div>
+              <div class="contact-val">linkedin.com/in/akhilch1208</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- MESSAGE COMPOSER -->
+      <div>
+        <div class="row-title" style="margin-bottom: 16px; font-size: 16px;">Write an Outreach Message</div>
+        <div class="msg-form">
+          <div>
+            <label class="msg-label">Your Name</label>
+            <input class="msg-input" id="m-name" type="text" placeholder="e.g. Sarah Johnson">
+          </div>
+          <div>
+            <label class="msg-label">Company</label>
+            <input class="msg-input" id="m-company" type="text" placeholder="e.g. Acme Corp">
+          </div>
+          <div>
+            <label class="msg-label">Role / Opportunity</label>
+            <input class="msg-input" id="m-role" type="text" placeholder="e.g. Senior Data Engineer – Azure">
+          </div>
+          <div>
+            <label class="msg-label">Message Type</label>
+            <select class="msg-select" id="m-type">
+              <option value="recruiter">Recruiter outreach</option>
+              <option value="hiring">Hiring manager</option>
+              <option value="collab">Freelance / Collaboration</option>
+            </select>
+          </div>
+          <button class="btn-generate" id="btn-gen" onclick="genMsg()">Generate Message</button>
+          <div class="gen-loading" id="gen-loading">GENERATING YOUR MESSAGE...</div>
+          <div class="gen-output" id="gen-output">
+            <div class="gen-subject" id="gen-subj"></div>
+            <div class="gen-body-txt" id="gen-body"></div>
+            <div class="gen-btns">
+              <button class="btn-sec" onclick="copyMsg()">Copy</button>
+              <button class="btn-sec" onclick="emailMsg()">Open in Email ↗</button>
+            </div>
+            <div class="ok-msg" id="ok-msg">✓ Copied to clipboard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">AKHIL CH</div>
+  <div class="footer-txt">Data Engineer · Dallas, TX · Open to Relocation</div>
+  <div class="footer-txt">© 2025 · Built with ❤️</div>
+</footer>
+
+<script>
+  // NAVBAR scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // PARTICLES
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random()*100}%;
+      animation-duration: ${6 + Math.random()*12}s;
+      animation-delay: ${Math.random()*8}s;
+      width: ${1 + Math.random()*2}px;
+      height: ${1 + Math.random()*2}px;
+    `;
+    pc.appendChild(p);
+  }
+
+  // SCROLL REVEAL
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // SMOOTH SCROLL for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // MESSAGE GENERATOR
+  let gSubj = '', gBody = '';
+
+  function genMsg() {
+    const name    = document.getElementById('m-name').value.trim() || '[Your Name]';
+    const company = document.getElementById('m-company').value.trim() || '[Your Company]';
+    const role    = document.getElementById('m-role').value.trim() || 'Data Engineering opportunity';
+    const type    = document.getElementById('m-type').value;
+    const typeLabel = {recruiter:'recruiter',hiring:'hiring manager',collab:'collaboration partner'}[type];
+
+    const prompt = `Write a ${typeLabel} outreach email to Data Engineer Akhil CH.
+
+Akhil's highlights:
+- 4+ years Data Engineering; MS Data Science, University of North Texas
+- Spectrum: 5TB/day telecom pipelines Azure Databricks+Kafka, Medallion Lakehouse ADLS Gen2+Delta Lake, cut Spark costs 25-30%, eliminated 30% billing discrepancies with Great Expectations, accelerated ML churn model training 25%
+- BCBS Texas: 200M+ claims HL7 FHIR+EDI 837/835, HIPAA compliant, reduced Snowflake costs 35-40%, zero outages
+- Softpoint: fintech ADF pipelines, Power BI dashboards, fraud detection feature engineering
+- Certs: Databricks Certified Data Engineer Associate, AWS Cloud Practitioner, Tableau Specialist
+- Skills: Python PySpark SQL Azure Databricks Delta Lake dbt Kafka Airflow Snowflake ADF ADLS Gen2 AWS Unity Catalog Great Expectations
+
+Sender: ${name} at ${company}
+Opportunity: ${role}
+
+Rules:
+- Reference 2-3 specific achievements from Akhil's background
+- Under 180 words, professional and warm
+- Clear CTA at end
+- No placeholder brackets in output
+- Reply ONLY with valid JSON no markdown: {"subject":"...","body":"..."}`;
+
+    const btn = document.getElementById('btn-gen');
+    btn.disabled = true;
+    document.getElementById('gen-loading').style.display = 'block';
+    document.getElementById('gen-output').style.display = 'none';
+
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    })
+    .then(r => r.json())
+    .then(d => {
+      const raw = (d.content||[]).find(b=>b.type==='text')?.text||'';
+      const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+      gSubj = parsed.subject; gBody = parsed.body;
+      document.getElementById('gen-subj').textContent = 'Subject: ' + gSubj;
+      document.getElementById('gen-body').textContent = gBody;
+      document.getElementById('gen-output').style.display = 'block';
+    })
+    .catch(() => {
+      gSubj = 'Data Engineering Opportunity – Azure/Databricks';
+      gBody = `Hi Akhil,\n\nI came across your profile and was genuinely impressed — particularly the 5TB/day Medallion Lakehouse you built at Spectrum and the HIPAA-compliant claims platform managing 200M+ records at BCBS of Texas. The 25–30% Spark cost reductions you delivered are remarkable.\n\nI'm ${name} from ${company}, reaching out about a ${role} role that aligns closely with your Azure/Databricks expertise.\n\nWould you be open to a 20-minute call this week?\n\nBest,\n${name}\n${company}`;
+      document.getElementById('gen-subj').textContent = 'Subject: ' + gSubj;
+      document.getElementById('gen-body').textContent = gBody;
+      document.getElementById('gen-output').style.display = 'block';
+    })
+    .finally(() => {
+      btn.disabled = false;
+      document.getElementById('gen-loading').style.display = 'none';
+    });
+  }
+
+  function copyMsg() {
+    navigator.clipboard.writeText('Subject: ' + gSubj + '\n\n' + gBody).then(() => {
+      const ok = document.getElementById('ok-msg');
+      ok.style.display = 'block';
+      setTimeout(() => ok.style.display = 'none', 2500);
+    });
+  }
+
+  function emailMsg() {
+    window.location.href = 'mailto:ch.akhil1648@gmail.com?subject=' + encodeURIComponent(gSubj) + '&body=' + encodeURIComponent(gBody);
+  }
+</script>
+</body>
+</html>
